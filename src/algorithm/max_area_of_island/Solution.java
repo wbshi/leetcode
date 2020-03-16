@@ -5,24 +5,31 @@ import java.util.Arrays;
 public class Solution {
     public int maxAreaOfIsland(int[][] grid) {
         if (grid.length == 0) return 0;
-        int[] preRow = new int[grid[0].length];
-        int[] curRow = new int[grid[0].length];
         int max = 0;
-        Arrays.fill(preRow, 0);
-        Arrays.fill(curRow, 0);
+
 
         for (int i = 0; i< grid.length; ++i) {
             for (int j = 0; j < grid[0].length; ++j) {
+                System.out.println("CUR:" + i + ":" + j);
                 if (grid[i][j] == 1) {
-                    curRow[j] = 1 + preRow[j] + (j == 0? 0 : curRow[j - 1]);
-                    max = Math.max(curRow[j], max);
+                    max = Math.max(max, dfs(grid, i, j));
                 }
             }
-            preRow = curRow.clone();
-            Arrays.fill(curRow, 0);
-            System.out.println("PRE:" + Arrays.toString(preRow));
-            //System.out.println("CUR:" + Arrays.toString(curRow));
         }
         return max;
+    }
+
+    public int dfs(int[][] grid, int row, int col) {
+        System.out.println(row + ":" + col);
+        if (row < 0 || col < 0 || row >= grid.length || col >= grid[0].length || grid[row][col] == 0)
+            return 0;
+        int count = 1;
+        grid[row][col] = 0;
+        count += dfs(grid, row - 1, col);
+        count += dfs(grid, row, col - 1);
+        count += dfs(grid, row + 1, col);
+        count += dfs(grid, row, col + 1);
+
+        return count;
     }
 }
