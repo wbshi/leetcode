@@ -10,20 +10,15 @@ public class Solution {
         return max;
     }
 
-    public void dfs(TreeNode root) {
-        if (root.left != null && root.right != null) {
-            dfs(root.left);
-            dfs(root.right);
-            max = Math.max(max, root.left.val + root.right.val + root.val);
-            root.val += Math.max(Math.max(root.left.val, root.right.val), 0);
-        } else if (root.left != null) {
-            dfs(root.left);
-            root.val += root.left.val <= 0 ? 0 : root.left.val;
-        } else if (root.right != null) {
-            dfs(root.right);
-            root.val += root.right.val <= 0 ? 0 : root.right.val;
-        }
+    public int dfs(TreeNode root) {
+        if (root == null) return 0;
+        int left_sum = dfs(root.left);
+        int right_sum = dfs(root.right);
 
+        max = Math.max(max, left_sum + right_sum + root.val);
+
+        root.val += Math.max(Math.max(left_sum, right_sum), 0);
         max = Math.max(max, root.val);
+        return root.val;
     }
 }
